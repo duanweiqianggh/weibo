@@ -14,6 +14,8 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::get('/', 'StaticPageController@home');
-Route::get('/help', 'StaticPageController@help');
-Route::get('/about', 'StaticPageController@about');
+
+//git config core.autocrlf false 稍后研究下此命令
+Route::get('/', 'StaticPagesController@home');
+Route::get('/help', 'StaticPagesController@help');
+Route::get('/about', 'StaticPagesController@about');
