@@ -19,12 +19,19 @@ class UsersController extends Controller
     }
 
     //用户注册提交处理
-    public function store(Request $request){
+    public function store(Request $request){    	
     	$this->validate($request,[
     		'name' => 'required|max:50',
     		'email' => 'required|email|unique:users|max:255',
     		'password' => 'required|confirmed|min:6'
     	]);
-    	return;
+    	$user = User::create([
+    		'name' => $request->name,
+    		'email' => $request->email,
+    		'password' => bcrypt($request->password)
+    	]);
+
+    	session()->flash('success','欢迎您加入大T博客');
+    	return redirect()->route('users.show',[$user]);
     }
 }
