@@ -30,7 +30,8 @@ class UsersController extends Controller
     		'email' => $request->email,
     		'password' => bcrypt($request->password)
     	]);
-
+        //此处注册成功后 直接为用户登录
+        Auth::login($user);
     	session()->flash('success','欢迎您加入大T博客');
     	return redirect()->route('users.show',[$user]);
     }
