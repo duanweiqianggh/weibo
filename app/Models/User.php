@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -42,5 +42,19 @@ class User extends Authenticatable
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
         return "http://www.gravatar.com/avatar/$hash?s=$size";
+    }
+
+    /**
+     * 注册新用户前监听事件 生成激活码
+     * Author David
+     * Date 2019-03-21
+     * @var array
+     */
+    static function boot()
+    {
+        parent::boot();
+        static::creating(function($user){
+            $user->activation_token = Str::random(30);
+        });
     }
 }
