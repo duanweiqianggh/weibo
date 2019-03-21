@@ -119,13 +119,11 @@ class UsersController extends Controller
     {
         $view = 'emails.confrm';
         $data = compact('user');
-        $from = '3075018691@qq.com';
-        $name = '大T博客';
         $to_email = $user->email;
         $subject = "感谢注册大T博客 请确认您的邮箱。";
 
-        Mail::send($view,$data,function ($message) use ($from,$name,$to_email,$subject){
-            $message->from($from,$name)->to($to_email)->subject($subject);
+        Mail::send($view,$data,function ($message) use ($to_email,$subject){
+            $message->to($to_email)->subject($subject);
         });
     }
 
