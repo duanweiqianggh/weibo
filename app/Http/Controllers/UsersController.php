@@ -52,10 +52,17 @@ class UsersController extends Controller
         return redirect('/');
     }
 
-    //个人信息展示页
+    /**
+     * 获取一个用户的所有微博数据 并分页
+     * Author David
+     * Date 2019-03-25
+     */
     public function show(User $user)
     {
-    	return view('users.show',compact('user'));
+        $statuses = $user->statuses()
+                            ->orderBy('created_at','desc')
+                            ->paginate(10);
+        return view('users.show',compact('user','statuses'));
     }
 
     //个人信息编辑页
@@ -101,6 +108,7 @@ class UsersController extends Controller
     }
 
     //用户邮箱认证处理
+
     public function confirmEmail($token)
     {
         $user = User::where('activation_token',$token)->firstOrFail();
@@ -114,7 +122,11 @@ class UsersController extends Controller
         return redirect()->route('users.show',$user->id);
     }
 
-    //负责发送邮件
+    /**
+     * 负责发送邮件
+     * Author David
+     * Date 2019-03-25
+     */
     private function sendEmailConfrmationto($user)
     {
         $view = 'emails.confrm';
