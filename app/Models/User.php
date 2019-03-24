@@ -57,4 +57,15 @@ class User extends Authenticatable
             $user->activation_token = Str::random(30);
         });
     }
+
+    /**
+     * 指明一个用户有多条微博
+     * Author David
+     * Date 2019-03-25
+     * @var object
+     */
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
 }
