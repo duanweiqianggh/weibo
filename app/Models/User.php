@@ -80,4 +80,59 @@ class User extends Authenticatable
         return $this->statuses()
                     ->orderBy('created_at','desc');
     }
+
+    /**
+     * 用户和粉丝表关联关系设定
+     * Author David
+     * Date 2019-03-26
+     */
+    public function followers(){
+        return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+    }
+
+    /**
+     * 设定粉丝和被关注人的关联关系
+     * Author David
+     * Date 2019-03-26
+     */
+    public function followings(){
+        return $this->belongsToMany(User::class,'followers','follower_id','user_id');
+    }
+
+    /**
+     * 用户关注操作
+     * Author David
+     * Date 2019-03-26
+     */
+    public function follow($user_ids)
+    {
+        if (!is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        return $this->followings()->sync($user_ids, false);
+    }
+
+    /**
+     * 用户取消关注操作
+     * Author David
+     * Date 2019-03-26
+     */
+    public function unfollow($user_ids)
+    {
+        if (!is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        return $this->followings()->deach($user_ids);
+    }
+
+
+    /**
+     * 是否关注某个用户
+     * Author David
+     * Date 2019-03-26
+     */
+    public function ifFollowing($user_id)
+    {
+        return $this->followings()->contains($users);
+    }
 }
