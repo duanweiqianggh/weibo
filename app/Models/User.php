@@ -122,7 +122,7 @@ class User extends Authenticatable
         if (!is_array($user_ids)){
             $user_ids = compact('user_ids');
         }
-        return $this->followings()->deach($user_ids);
+        return $this->followings()->detach($user_ids);
     }
 
 
@@ -131,8 +131,8 @@ class User extends Authenticatable
      * Author David
      * Date 2019-03-26
      */
-    public function ifFollowing($user_id)
+    public function isFollowing($user_id)
     {
-        return $this->followings()->contains($users);
+        return $this->followings->contains($user_id);
     }
 }
