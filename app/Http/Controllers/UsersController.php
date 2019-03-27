@@ -53,6 +53,23 @@ class UsersController extends Controller
     }
 
     /**
+     * 负责发送邮件
+     * Author David
+     * Date 2019-03-25
+     */
+    private function sendEmailConfrmationto($user)
+    {
+        $view = 'emails.confrm';
+        $data = compact('user');
+        $to_email = $user->email;
+        $subject = "感谢注册大T博客 请确认您的邮箱。";
+
+        Mail::send($view,$data,function ($message) use ($to_email,$subject){
+            $message->to($to_email)->subject($subject);
+        });
+    }
+
+    /**
      * 获取一个用户的所有微博数据 并分页
      * Author David
      * Date 2019-03-25
@@ -123,22 +140,28 @@ class UsersController extends Controller
     }
 
     /**
-     * 负责发送邮件
+     * 用户关注列表页
      * Author David
-     * Date 2019-03-25
+     * Date 2019-03-27
      */
-    private function sendEmailConfrmationto($user)
+    public function followings(User $user)
     {
-        $view = 'emails.confrm';
-        $data = compact('user');
-        $to_email = $user->email;
-        $subject = "感谢注册大T博客 请确认您的邮箱。";
-
-        Mail::send($view,$data,function ($message) use ($to_email,$subject){
-            $message->to($to_email)->subject($subject);
-        });
+        $users = $user->followings()->paginate(20);
+        $title = $user->name . '关注的人';
+        return view('users.show_follow', compact('users','title'));
     }
 
+    /**
+     * 用户粉丝列表页
+     * Author David
+     * Date 2019-03-27
+     */
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(20);
+        $title = $user->name . '的粉丝';
+        return view('users.show_follow', compact('users','title'));
+    }
 }
 
 
