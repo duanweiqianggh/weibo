@@ -53,6 +53,23 @@ class UsersController extends Controller
     }
 
     /**
+     * 负责发送邮件
+     * Author David
+     * Date 2019-03-25
+     */
+    private function sendEmailConfrmationto($user)
+    {
+        $view = 'emails.confrm';
+        $data = compact('user');
+        $to_email = $user->email;
+        $subject = "感谢注册大T博客 请确认您的邮箱。";
+
+        Mail::send($view,$data,function ($message) use ($to_email,$subject){
+            $message->to($to_email)->subject($subject);
+        });
+    }
+
+    /**
      * 获取一个用户的所有微博数据 并分页
      * Author David
      * Date 2019-03-25
@@ -120,23 +137,6 @@ class UsersController extends Controller
         Auth::login($user);
         session()->flash('success','恭喜您 认证成功');
         return redirect()->route('users.show',$user->id);
-    }
-
-    /**
-     * 负责发送邮件
-     * Author David
-     * Date 2019-03-25
-     */
-    private function sendEmailConfrmationto($user)
-    {
-        $view = 'emails.confrm';
-        $data = compact('user');
-        $to_email = $user->email;
-        $subject = "感谢注册大T博客 请确认您的邮箱。";
-
-        Mail::send($view,$data,function ($message) use ($to_email,$subject){
-            $message->to($to_email)->subject($subject);
-        });
     }
 
     /**
